@@ -1,0 +1,23 @@
+#ventaActual {
+    padding-top: 0%;
+    color: #00e071 !important;
+    font-size: 30px;
+}
+
+#metaActual {
+    padding-top: 0%;
+    color:rgb(122, 122, 122) !important;
+    font-size: 30px;
+}
+
+.diferenciaNegativa {
+    padding-top: 0%;
+    color:#ff4a5f !important;
+    font-size: 30px;
+}
+
+.diferenciaPositiva {
+    padding-top: 0%;
+    color:#00e071 !important;
+    font-size: 30px;
+}

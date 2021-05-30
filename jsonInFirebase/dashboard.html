@@ -53,11 +53,91 @@
             firebase.initializeApp(firebaseConfig);
             firebase.analytics();
         </script>
+
+    <!-- My Styles -->
+    <link rel="stylesheet" href="css/DashboardStyles.css">
 </head>
 
 <body>
-    
+    <div class="container-fluid m-4">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4>Cumplimiento de ventas</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <h5 class="card-title p-2">Venta actual</h5>
+                                    <div class="card-body" id="ventaActual">₡ 282259.99 </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                    <h5 class="card-title p-2">Meta actual</h5>
+                                    <div class="card-body" id="metaActual">₡ 282259.99 </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card">
+                                    <h5 class="card-title p-2">Diferencia</h5>
+                                    <div class="card-body" id="diferencia">₡ 282259.99 </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="barChart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h5>Cumplimiento</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="complianceGauge"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h5>Proyectado</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="projectedGauge"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="barChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- DMR: js donde está la funcionalidad ADD, REMOVE, UPDATE-->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="./dashboardFunctions.js"></script>
-  </body>
+</body>
+
 </html>

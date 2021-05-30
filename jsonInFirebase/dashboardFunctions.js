@@ -4,6 +4,11 @@ const urlParams = new URLSearchParams(queryString);
 
 const personID = parseInt(urlParams.get('personID'), 10);
 
+const formatter = new Intl.NumberFormat('es-CR', {
+  style: 'currency',
+  currency: 'CRC',
+  minimumFractionDigits: 0
+})
 
 window.onload = function() {
   getData();
@@ -59,31 +64,45 @@ function setPersonData() {
       "projectedCompliance" : projectedCompliance,
       "weekResults" : getWeekResults(jsonData[personID].weekResult.data, personAllData)
   }
-  console.log(personData);
 }
 
 function getWeekResults(ogWeekResults, personAllData){
 
+  let sale = 0;
   let budget = personAllData.budget;
   let pastMonthSale = personAllData.pastMonthSale;
   let pastYearSale = personAllData.pastYearSale;
-  let weekResults = [];
 
   let acumWeekWeight = 0;
+  
+  let sales = [];
+  let budgets = [];
+  let pastMonthSales = [];
+  let pastYearSales = [];
+
   ogWeekResults.forEach(element => {
-    acumWeekWeight += element.weekWeight;
     
-    weekResults.push(
-      {
-        "sale" : element.sale,
-        "budget" : acumWeekWeight * budget,
-        "pastMonthSale" : acumWeekWeight * pastMonthSale,
-        "pastYearSale" : acumWeekWeight * pastYearSale,
-      }
-    );
+    acumWeekWeight += element.weekWeight;
+    sale += element.sale;
+
+    sales.push(formatMillions(sale));
+    budgets.push(formatMillions((acumWeekWeight/100) * budget));
+    pastMonthSales.push(formatMillions((acumWeekWeight/100) * pastMonthSale));
+    pastYearSales.push(formatMillions((acumWeekWeight/100) * pastYearSale));
   });
+  
+  let weekResults = {
+    "sales" : sales,
+    "budgets" : budgets,
+    "pastMonthSales" : pastMonthSales,
+    "pastYearSales" : pastYearSales
+  };
 
   return weekResults;
+}
+
+function formatMillions(num){
+  return ((num / 1000000).toFixed(2) + "M");
 }
 
 function getProjectedCompliancePer(monthAdvance, compliance){
@@ -93,7 +112,6 @@ function getProjectedCompliancePer(monthAdvance, compliance){
   return 0;
 }
 
-
 function getCompliance(sale, budget){
 
   if(budget !== 0){
@@ -102,13 +120,173 @@ function getCompliance(sale, budget){
   return 0;  
 }
 
-
-
 function getData() {
  // once() method
     rootRef.on('value',(snap)=>{
     jsonData = snap.val();
     console.log(jsonData);
     setPersonData();
+    renderCharts();
   });
+}
+
+
+/*
+
+Charts functions
+
+*/
+
+function renderCharts(){
+  renderBarChart();
+  renderSaleComplianceData();
+  renderSaleBudgetCompGauge();
+  renderProjectedGauge();
+}
+
+function renderBarChart(){
+  var barChartoptions = {
+      series: [{name: 'Meta', data: personData.weekResults.budgets}, {name: 'Venta', data: personData.weekResults.sales}, {name: 'Mes anterior', data: personData.weekResults.pastMonthSales}, {name: 'Año anterior',data: personData.weekResults.pastYearSales}],
+      chart: {
+      type: 'bar',
+      height: 430,
+    },
+    colors : ['#ff4a5f','#00e071','#8e8e8e','#717171'],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        dataLabels: {
+          position: 'top',
+        },
+      }
+    },
+    dataLabels: {
+      enabled: false,
+      offsetX: -6,
+      style: {
+        fontSize: '12px',
+        colors: ['#fff']
+      }
+    },
+    stroke: {
+      show: true,
+      width: 1,
+      colors: ['#fff']
+    },
+    tooltip: {
+      shared: true,
+      intersect: false
+    },
+    xaxis: {
+      categories: ["Semana 1", "Semana 2", "Semana 3", "Semana 4", "Semana 5", "Semana 6"],
+    },
+    yaxis: {
+      show : true,
+      title : "₡ en Millones",
+    },
+    
+  };
+  var barChart = new ApexCharts(document.querySelector("#barChart"), barChartoptions);
+  barChart.render();
+}
+
+function renderSaleComplianceData(){
+  document.getElementById("ventaActual").innerHTML = "₡" + personData.sale.toFixed(3);
+  document.getElementById("metaActual").innerHTML = "₡" + personData.budget.toFixed(3);
+  document.getElementById("diferencia").innerHTML = "₡" + personData.saleBudgetDifference.toFixed(3);
+
+  if (personData.saleBudgetDifference <= 0) {
+    document.getElementById("diferencia").classList.add("diferenciaNegativa");
+    console.log("Quede");
+  }
+  else{
+    document.getElementById("diferencia").classList.add("diferenciaPositiva");
+  }
+}
+
+function renderSaleBudgetCompGauge(){
+  var options = {
+    chart: {
+      height: 350,
+      type: "radialBar"
+    },
+    
+    series: [personData.saleBudgetCompliance],
+    
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 15,
+          size: "65%"
+        },
+       
+        dataLabels: {
+          showOn: "always",
+          name: {
+            offsetY: -10,
+            show: true,
+            color: "#888",
+            fontSize: "13px"
+          },
+          value: {
+            color: "#111",
+            fontSize: "30px",
+            show: true
+          }
+        }
+      }
+    },
+  
+    stroke: {
+      lineCap: "round",
+    },
+    labels: ["Cumplimiento"],
+    colors: ["#00e071"]
+  };
+
+  var chart = new ApexCharts(document.querySelector("#complianceGauge"), options);
+  chart.render();
+}
+
+function renderProjectedGauge(){
+  var options = {
+    chart: {
+      height: 280,
+      type: "radialBar"
+    },
+    
+    series: [personData.projectedCompliancePer.toFixed(2)],
+    
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 15,
+          size: "65%"
+        },
+       
+        dataLabels: {
+          showOn: "always",
+          name: {
+            offsetY: -10,
+            show: true,
+            color: "#888",
+            fontSize: "13px"
+          },
+          value: {
+            color: "#111",
+            fontSize: "30px",
+            show: true
+          }
+        }
+      }
+    },
+  
+    stroke: {
+      lineCap: "round",
+    },
+    labels: ["₡" + personData.projectedCompliance.toFixed(3)]
+  };
+
+  var chart = new ApexCharts(document.querySelector("#projectedGauge"), options);
+  chart.render();
 }
