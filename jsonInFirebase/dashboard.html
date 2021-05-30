@@ -61,8 +61,8 @@
 <body>
     <div class="container-fluid m-4">
         <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
+            <div class="col-sm-6 mt-1">
+                <div class="shadow card">
                     <div class="card-header text-center">
                         <h4>Cumplimiento de ventas</h4>
                     </div>
@@ -71,19 +71,19 @@
                             <div class="col">
                                 <div class="card">
                                     <h5 class="card-title p-2">Venta actual</h5>
-                                    <div class="card-body" id="ventaActual">₡ 282259.99 </div>
+                                    <div class="card-body" id="ventaActual"> - </div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="card">
                                     <h5 class="card-title p-2">Meta actual</h5>
-                                    <div class="card-body" id="metaActual">₡ 282259.99 </div>
+                                    <div class="card-body" id="metaActual"> - </div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="card">
                                     <h5 class="card-title p-2">Diferencia</h5>
-                                    <div class="card-body" id="diferencia">₡ 282259.99 </div>
+                                    <div class="card-body" id="diferencia"> - </div>
                                 </div>
                             </div>
                         </div>
@@ -93,8 +93,8 @@
             </div>
             <div class="col-sm-6">
                 <div class="row">
-                    <div class="col-sm-6">
-                        <div class="card">
+                    <div class="col-sm-6 mt-1">
+                        <div class="shadow card">
                             <div class="card-header text-center">
                                 <h5>Cumplimiento</h5>
                             </div>
@@ -103,8 +103,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="card">
+                    <div class="col-sm-6 mt-1">
+                        <div class="shadow card">
                             <div class="card-header text-center">
                                 <h5>Proyectado</h5>
                             </div>
@@ -114,19 +114,80 @@
                         </div>
                     </div>
                 </div>
-                <div class="row pt-3">
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="barChart"></div>
+                <div class="row mt-1">
+                    <div class="col-sm-6 mt-4">
+                        <div class="shadow card">
+                            <div class="card-header text-center">
+                                <h5>Pedidos Abiertos</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <div class="col-sm-8 text-center">
+                                        <div class="myCardText" id="pedidosAbiertos"> - </div> 
+                                    </div>
+                                    <div class="col-sm-4 text-center">
+                                        <i class="fas fa-file-alt cardIcons"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <div class="col-sm-6 mt-4">
+                        <div class="shadow card">
+                            <div class="card-header text-center">
+                                <h5>Cotizaciones Abiertas</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <div class="col-sm-8 text-center">
+                                        <div class="myCardText" id="cotizacionesAbiertas"> - </div> 
+                                    </div>
+                                    <div class="col-sm-4 text-center">
+                                        <i class="fas fa-shopping-cart cardIcons"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 mt-4">
+                <div class="shadow card">
+                    <div class="card-header text-center">
+                        <h5>Acumulado anual</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-sm-6 text-center lineSep">
+                                <h6>Venta</h6>
+                                <div class="myCardText" id="ventaAnual"> - </div> 
+                                <div class="myCardSmallText text-muted" id="metaAnual"> - </div> 
+                            </div>
+                            <div class="col-sm-6 text-center">
+                                <h6>Cumplimiento</h6>
+                                <div class="myCardText" id="cumplimientoAnual"> - </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 mt-4">
+                <div class="shadow card">
+                    <div class="card-header text-center">
+                        <h5>Ventas vs. Devoluciones </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-sm-6 text-center lineSep">
+                                <h6>Facturación</h6>
+                                <div class="myCardText" id="facturacion"> - </div> 
+                            </div>
+                            <div class="col-sm-6 text-center">
+                                <h6>Devoluciones</h6>
+                                <div class="myCardText" id="devoluciones"> - </div> 
+                                <div class="myCardSmallText text-muted" id=""> - </div> 
                             </div>
                         </div>
                     </div>

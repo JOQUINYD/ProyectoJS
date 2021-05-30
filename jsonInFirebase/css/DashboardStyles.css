@@ -21,3 +21,17 @@
     color:#00e071 !important;
     font-size: 30px;
 }
+
+.cardIcons {
+    font-size: 48px;
+}
+
+.myCardText {
+    padding-top: 0%;
+    color:rgb(22, 22, 22) !important;
+    font-size: 30px;
+}
+
+.lineSep {
+    border-right: 2px solid #ccc;
+}

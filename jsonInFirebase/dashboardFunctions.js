@@ -142,6 +142,7 @@ function renderCharts(){
   renderSaleComplianceData();
   renderSaleBudgetCompGauge();
   renderProjectedGauge();
+  renderOtherCards();
 }
 
 function renderBarChart(){
@@ -191,9 +192,9 @@ function renderBarChart(){
 }
 
 function renderSaleComplianceData(){
-  document.getElementById("ventaActual").innerHTML = "₡" + personData.sale.toFixed(3);
-  document.getElementById("metaActual").innerHTML = "₡" + personData.budget.toFixed(3);
-  document.getElementById("diferencia").innerHTML = "₡" + personData.saleBudgetDifference.toFixed(3);
+  document.getElementById("ventaActual").innerHTML = formatter.format(personData.sale);
+  document.getElementById("metaActual").innerHTML =  formatter.format(personData.budget);
+  document.getElementById("diferencia").innerHTML = formatter.format(personData.saleBudgetDifference);
 
   if (personData.saleBudgetDifference <= 0) {
     document.getElementById("diferencia").classList.add("diferenciaNegativa");
@@ -207,7 +208,7 @@ function renderSaleComplianceData(){
 function renderSaleBudgetCompGauge(){
   var options = {
     chart: {
-      height: 350,
+      height: 400,
       type: "radialBar"
     },
     
@@ -251,7 +252,7 @@ function renderSaleBudgetCompGauge(){
 function renderProjectedGauge(){
   var options = {
     chart: {
-      height: 280,
+      height: 400,
       type: "radialBar"
     },
     
@@ -284,9 +285,19 @@ function renderProjectedGauge(){
     stroke: {
       lineCap: "round",
     },
-    labels: ["₡" + personData.projectedCompliance.toFixed(3)]
+    labels: [formatter.format(personData.projectedCompliance)]
   };
 
   var chart = new ApexCharts(document.querySelector("#projectedGauge"), options);
   chart.render();
+}
+
+function renderOtherCards(){
+  document.getElementById("pedidosAbiertos").innerHTML = formatter.format(personData.salesOrders);
+  document.getElementById("cotizacionesAbiertas").innerHTML =  formatter.format(personData.quotations);
+  document.getElementById("ventaAnual").innerHTML =  formatter.format(personData.yearSale);
+  document.getElementById("metaAnual").innerHTML =  formatter.format(personData.yearBudget);
+  document.getElementById("cumplimientoAnual").innerHTML =  personData.yearCompliance + "%";
+  document.getElementById("facturacion").innerHTML =  formatter.format(personData.invoices);
+  document.getElementById("devoluciones").innerHTML =  formatter.format(personData.creditNotes);
 }
