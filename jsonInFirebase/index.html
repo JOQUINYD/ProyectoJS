@@ -53,21 +53,27 @@
             firebase.initializeApp(firebaseConfig);
             firebase.analytics();
         </script>
+
+        <link rel="stylesheet" href="css/DashboardStyles.css">
 </head>
 
 <body>
+        <!-- Image and text -->
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand headerTitle" href="#">
+                <i class="fas fa-users ps-4"></i>
+                Vendedores
+            </a>
+        </nav>    
         <!-- BEGIN: ESTADO DE CUENTA -->
         <section id="horizontal">
             <a name="table1-anchor"></a>
             <div class="row">
                 <div class="col-12">
-                    <div class="card p-5">
-                        <div class="card-header">
-                            <h4 class="card-title" id="table1TitleID">Vendedores</h4>
-                        </div>
+                    <div class="card m-5">
                         <div class="card-content collapse show">
                             <div class="card-body card-dashboard">
-                                <div class="table-responsive">
+                                <div class="table-responsive" id="table1TitleID">
                                     <table class="table display nowrap table-striped table-bordered scroll-horizontal" id="table1TableID">
                                         <thead>
                                             <tr>

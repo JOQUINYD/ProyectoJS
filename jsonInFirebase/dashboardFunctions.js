@@ -49,6 +49,7 @@ function setPersonData() {
   let projectedCompliance = (projectedCompliancePer / 100) * personAllData.budget; 
 
   personData = {
+      "name" : personAllData.slpName,
       "sale" : personAllData.sale,
       "budget" : personAllData.budget,
       "saleBudgetDifference" : personAllData.sale - personAllData.budget,
@@ -85,10 +86,17 @@ function getWeekResults(ogWeekResults, personAllData){
     acumWeekWeight += element.weekWeight;
     sale += element.sale;
 
+    /*
     sales.push(formatMillions(sale));
     budgets.push(formatMillions((acumWeekWeight/100) * budget));
     pastMonthSales.push(formatMillions((acumWeekWeight/100) * pastMonthSale));
     pastYearSales.push(formatMillions((acumWeekWeight/100) * pastYearSale));
+    */
+
+    sales.push(sale);
+    budgets.push((acumWeekWeight/100) * budget);
+    pastMonthSales.push((acumWeekWeight/100) * pastMonthSale);
+    pastYearSales.push((acumWeekWeight/100) * pastYearSale);
   });
   
   let weekResults = {
@@ -102,7 +110,7 @@ function getWeekResults(ogWeekResults, personAllData){
 }
 
 function formatMillions(num){
-  return ((num / 1000000).toFixed(2) + "M");
+  return ((num / 1000000).toFixed(0) + "M");
 }
 
 function getProjectedCompliancePer(monthAdvance, compliance){
@@ -138,6 +146,7 @@ Charts functions
 */
 
 function renderCharts(){
+  renderUserName();
   renderBarChart();
   renderSaleComplianceData();
   renderSaleBudgetCompGauge();
@@ -176,16 +185,24 @@ function renderBarChart(){
     },
     tooltip: {
       shared: true,
-      intersect: false
+      intersect: false,
+      y: {
+        formatter : function(value){
+          return formatter.format(value);
+        }
+      }
     },
     xaxis: {
       categories: ["Semana 1", "Semana 2", "Semana 3", "Semana 4", "Semana 5", "Semana 6"],
     },
     yaxis: {
       show : true,
-      title : "₡ en Millones",
+      labels: {
+        formatter: function(value){
+          return formatMillions(value);
+        }
+      }
     },
-    
   };
   var barChart = new ApexCharts(document.querySelector("#barChart"), barChartoptions);
   barChart.render();
@@ -300,4 +317,8 @@ function renderOtherCards(){
   document.getElementById("cumplimientoAnual").innerHTML =  personData.yearCompliance + "%";
   document.getElementById("facturacion").innerHTML =  formatter.format(personData.invoices);
   document.getElementById("devoluciones").innerHTML =  formatter.format(personData.creditNotes);
+}
+
+function renderUserName(){
+  document.getElementById("nombreVendedor").innerHTML = personData.name;
 }

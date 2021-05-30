@@ -35,3 +35,8 @@
 .lineSep {
     border-right: 2px solid #ccc;
 }
+
+.headerTitle{
+    font-size: 40px;
+    color: white;
+}
