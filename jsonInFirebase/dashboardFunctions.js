@@ -11,7 +11,18 @@ const formatter = new Intl.NumberFormat('es-CR', {
 })
 
 window.onload = function() {
-  getData();
+  let promise = new Promise((resolve, reject) =>{
+    rootRef.on('value',(snap)=>{
+      resolve(snap.val());
+    });
+  })
+
+  promise.then((data) => {
+    jsonData = data;
+    setPersonData();
+    renderCharts();
+  });
+
   console.log("Que pasa chavales")
 };
 
@@ -44,8 +55,8 @@ function setPersonData() {
 
   let personAllData = jsonData[personID].infoResult.data[0];
 
-  let saleBudgetCompliance = getCompliance(personAllData.sale, personAllData.budget);
-  let projectedCompliancePer = getProjectedCompliancePer(personAllData.monthAdvance, saleBudgetCompliance);
+  let saleBudgetCompliance = getPercent(personAllData.sale, personAllData.budget);
+  let projectedCompliancePer = getPercent(saleBudgetCompliance, personAllData.monthAdvance);
   let projectedCompliance = (projectedCompliancePer / 100) * personAllData.budget; 
 
   personData = {
@@ -56,14 +67,15 @@ function setPersonData() {
       "saleBudgetCompliance" : saleBudgetCompliance,
       "yearSale" : personAllData.yearSale,
       "yearBudget" : personAllData.yearBudget,
-      "yearCompliance" : getCompliance(personAllData.yearSale, personAllData.yearBudget),
+      "yearCompliance" : getPercent(personAllData.yearSale, personAllData.yearBudget),
       "invoices" : personAllData.invoices,
       "creditNotes" : personAllData.creditNotes,
       "salesOrders" : personAllData.salesOrders,
       "quotations" : personAllData.quotations,
       "projectedCompliancePer" : projectedCompliancePer,
       "projectedCompliance" : projectedCompliance,
-      "weekResults" : getWeekResults(jsonData[personID].weekResult.data, personAllData)
+      "weekResults" : getWeekResults(jsonData[personID].weekResult.data, personAllData),
+      "creditInvoicePer" : getPercent(personAllData.creditNotes, personAllData.invoices)
   }
 }
 
@@ -113,17 +125,10 @@ function formatMillions(num){
   return ((num / 1000000).toFixed(0) + "M");
 }
 
-function getProjectedCompliancePer(monthAdvance, compliance){
-  if(monthAdvance != 0){
-    return (compliance  / monthAdvance) * 100;
-  }
-  return 0;
-}
+function getPercent(dividend, divisor){
 
-function getCompliance(sale, budget){
-
-  if(budget !== 0){
-    return ((sale / budget) * 100).toFixed(1);
+  if(divisor !== 0){
+    return ((dividend / divisor) * 100);
   }
   return 0;  
 }
@@ -229,7 +234,7 @@ function renderSaleBudgetCompGauge(){
       type: "radialBar"
     },
     
-    series: [personData.saleBudgetCompliance],
+    series: [personData.saleBudgetCompliance.toFixed(2)],
     
     plotOptions: {
       radialBar: {
@@ -314,9 +319,10 @@ function renderOtherCards(){
   document.getElementById("cotizacionesAbiertas").innerHTML =  formatter.format(personData.quotations);
   document.getElementById("ventaAnual").innerHTML =  formatter.format(personData.yearSale);
   document.getElementById("metaAnual").innerHTML =  formatter.format(personData.yearBudget);
-  document.getElementById("cumplimientoAnual").innerHTML =  personData.yearCompliance + "%";
+  document.getElementById("cumplimientoAnual").innerHTML =  personData.yearCompliance.toFixed(2) + "%";
   document.getElementById("facturacion").innerHTML =  formatter.format(personData.invoices);
   document.getElementById("devoluciones").innerHTML =  formatter.format(personData.creditNotes);
+  document.getElementById("creditInvoicePer").innerHTML = personData.creditInvoicePer.toFixed(2) + "%";
 }
 
 function renderUserName(){
